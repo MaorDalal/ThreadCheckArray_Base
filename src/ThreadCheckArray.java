@@ -13,19 +13,20 @@ import java.util.ArrayList;
  * All access to the shared object is done inside {@code synchronized (sd)} blocks.
  */
 public class ThreadCheckArray implements Runnable {
-    /** {@code true} once this thread has found a valid subset. */
+
+    /** {@code true} if this thread has found a valid subset. */
     private boolean flag;
 
-    /** Marks, for every index of {@link #array}, whether this thread uses that element in its solution. */
+    /** Marks which elements belong to the subset found by this thread. */
     private boolean[] winArray;
 
-    /** The data shared with the other thread; also used as the lock object. */
+    /** The data object shared between all searching threads. */
     SharedData sd;
 
-    /** The input numbers, taken from the shared data. */
+    /** The numbers to search, stored as a {@code ArrayList<Integer>}. */
     ArrayList<Integer> array;
 
-    /** The target sum, taken from the shared data. */
+    /** The target sum. */
     int b;
 
     /**
@@ -45,12 +46,13 @@ public class ThreadCheckArray implements Runnable {
     }
 
     /**
-     * Recursively checks whether some subset of the first {@code n} elements sums to {@code b}.
-     * For element {@code n-1} it first tries to include it, then to exclude it.
-     * The search stops early if any thread has already set the shared flag.
+     * Recursively checks whether a subset of the first {@code n} elements
+     * sums to {@code b}. Elements that belong to the found subset are marked
+     * in {@code winArray}. The search stops early if another thread has
+     * already found a solution.
      *
-     * @param n the number of elements (from the start of the list) still to consider
-     * @param b the remaining sum that the chosen elements must reach
+     * @param n the number of elements (from the start of the list) to consider
+     * @param b the remaining sum that must be reached
      */
     void rec(int n, int b) {
         synchronized (sd) {
