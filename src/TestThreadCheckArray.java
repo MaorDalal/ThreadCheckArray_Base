@@ -1,16 +1,32 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Console test driver for the multithreaded Subset Sum search.
+ * <p>
+ * Reads a list of integers into a {@code ArrayList<Integer>} and a target sum
+ * {@code b}, starts two {@link ThreadCheckArray} threads that share one
+ * {@link SharedData} object, and prints whether a subset summing to {@code b}
+ * exists. If it does, the program prints the indexes (I), the values (A) and
+ * a {@code 0/1} row (C) marking the elements of the found subset.
+ */
 public class TestThreadCheckArray {
+
+    /**
+     * Program entry point.
+     *
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args) {
         try (Scanner input = new Scanner(System.in)) {
             Thread thread1, thread2;
             System.out.println("Enter array size");
             int num  = input.nextInt();
-            int[] array = new int[num];
+            ArrayList<Integer> array = new ArrayList<>(num);
             System.out.println("Enter numbers for array");
 
             for (int index = 0; index < num; index++)
-                array[index] = input.nextInt();
+                array.add(input.nextInt());
 
             System.out.println("Enter number");
             num = input.nextInt();
@@ -31,9 +47,9 @@ public class TestThreadCheckArray {
                 System.out.println("Sorry");
                 return;
             }
-            System.out.println("Solution for b : " + sd.getB() + ",n = " + sd.getArray().length);
+            System.out.println("Solution for b : " + sd.getB() + ",n = " + sd.getArray().size());
             System.out.print("I:    ");
-            for(int index = 0; index < sd.getArray().length ; index++)
+            for(int index = 0; index < sd.getArray().size() ; index++)
                 System.out.print(index + "    ");
             System.out.println();
             System.out.print("A:    ");
